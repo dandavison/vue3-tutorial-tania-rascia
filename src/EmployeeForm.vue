@@ -1,17 +1,27 @@
 <template>
   <form @submit.prevent="handleSubmit" id="employee-form">
     <label>Name</label>
-    <input v-model="employee.name" type="text" />
+    <input
+      type="text"
+      v-model="employee.name"
+      @focus="clearStatus"
+      @keypress="clearStatus"
+      :class="{ 'has-error': submitting && invalidName }"
+    />
     <label>Email</label>
-    <input v-model="employee.email" type="text" />
+    <input
+      type="text"
+      v-model="employee.email"
+      @focus="clearStatus"
+      @keypress="clearStatus"
+      :class="{ 'has-error': submitting && invalidEmail }"
+    />
     <button>Add Employee</button>
   </form>
-  <div v-if="error && submitting" class="error-message">
+  <p v-if="error && submitting" class="error-message">
     ❗Please fill out all required fields
-  </div>
-  <div v-if="success" class="success-message">
-    ✅ Employee successfully added
-  </div>
+  </p>
+  <p v-if="success" class="success-message">✅ Employee successfully added</p>
 </template>
 
 <script>
@@ -53,9 +63,12 @@ export default {
     return {
       employee,
       handleSubmit,
+      clearStatus,
       submitting,
       error,
       success,
+      invalidName,
+      invalidEmail,
     };
   },
   emits: ["add:employee"],
